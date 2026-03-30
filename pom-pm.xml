@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.WalkMe-int</groupId>
   <artifactId>walkme-android-sdk-editor</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.6alpha</version>
   <packaging>aar</packaging>
   <dependencies>
     <dependency>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>com.github.WalkMe-int</groupId>
       <artifactId>walkme-android-sdk-common</artifactId>
-      <version>0.0.1</version>
+      <version>0.0.6alpha</version>
     </dependency>
     <dependency>
       <groupId>androidx.fragment</groupId>
@@ -45,36 +45,6 @@
       <groupId>androidx.lifecycle</groupId>
       <artifactId>lifecycle-runtime-compose</artifactId>
       <version>2.8.6</version>
-    </dependency>
-    <dependency>
-      <groupId>androidx.compose.foundation</groupId>
-      <artifactId>foundation</artifactId>
-      <version>1.10.6</version>
-    </dependency>
-        <dependency>
-      <groupId>androidx.compose</groupId>
-      <artifactId>compose-bom</artifactId>
-      <version>2025.12.00</version>
-    </dependency>
-    <dependency>
-      <groupId>androidx.compose.ui</groupId>
-      <artifactId>ui</artifactId>
-      <version>1.10.6</version>
-    </dependency>
-    <dependency>
-      <groupId>androidx.compose.ui</groupId>
-      <artifactId>ui-tooling-preview</artifactId>
-      <version>1.10.6</version>
-    </dependency>
-    <dependency>
-      <groupId>androidx.compose.material3</groupId>
-      <artifactId>material3</artifactId>
-      <version>1.4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>androidx.compose.material</groupId>
-      <artifactId>material-icons-core</artifactId>
-      <version>1.7.8</version>
     </dependency>
     <dependency>
       <groupId>io.insert-koin</groupId>
