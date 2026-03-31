@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.WalkMe-int</groupId>
   <artifactId>walkme-android-sdk-common</artifactId>
-  <version>0.0.7alpha</version>
+  <version>0.0.8alpha</version>
   <packaging>aar</packaging>
   <dependencies>
     <dependency>

@@ -93,7 +93,7 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 
 | API | Purpose |
 |-----|--------|
-| `start(activity, systemGuid, options, env, dataCenter)` | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run. |
+| `start(activity, options)` | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run. |
 | `stop()` | Stop Power Mode and the underlying SDK; after this, `start()` may be called again. |
 | `setUserId(userId)` | Set or clear (`null`) the end-user id for segmentation, analytics, and support. |
 | `setLanguage(language)` | Set UI language where your WalkMe configuration supports it (requires the relevant admin option when applicable). |
@@ -101,26 +101,26 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 
 **Startup options**
 
-- `WalkmePmStartOptions(analyticsEnabled = true, localLogsEnabled = false)` — analytics and optional local logging.
+- `com.walkme.common.WalkMeStartOptions` — same as the core SDK: `systemGuid` (required), `env`, `dataCenter` ([WalkmeDataCenter]).
+- `com.walkme.common.WalkmeDataCenter` — `Prod`, `Eu`, `Us01`, `Eu01`, or `Custom("…")` for any wire string.
 
 **Example (Kotlin)**
 
 ```kotlin
+import com.walkme.common.WalkMeStartOptions
+import com.walkme.common.WalkmeDataCenter
 import com.walkme.pm.WalkmeSdkPowerMode
-import com.walkme.pm.WalkmePmStartOptions
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WalkmeSdkPowerMode.start(
-            activity = this,
-            systemGuid = "<YOUR_SYSTEM_GUID>",
-            options = WalkmePmStartOptions(
-                analyticsEnabled = true,
-                localLogsEnabled = false
+            this,
+            WalkMeStartOptions(
+                systemGuid = "<YOUR_SYSTEM_GUID>",
+                env = "Production",
+                dataCenter = WalkmeDataCenter.ProdEu,
             ),
-            env = "Production",
-            dataCenter = "prod"
         )
     }
 

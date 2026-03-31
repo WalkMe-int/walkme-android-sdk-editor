@@ -1,6 +1,6 @@
 install:
   # install common first
-  - mvn install:install-file -Dfile=wmCommonSdk-release.aar -DgroupId=com.github.WalkMe-int -DartifactId=walkme-android-sdk-common -Dversion=0.0.7alpha -Dpackaging=aar -DgeneratePom=false -DpomFile=pom-common.xml
+  - mvn install:install-file -Dfile=wmCommonSdk-release.aar -DgroupId=com.github.WalkMe-int -DartifactId=walkme-android-sdk-common -Dversion=0.0.8alpha -Dpackaging=aar -DgeneratePom=false -DpomFile=pom-common.xml
 
   # then pm sdk (depends on common)
-  - mvn install:install-file -Dfile=wmPmSdk-release.aar -DgroupId=com.github.WalkMe-int -DartifactId=walkme-android-sdk-editor -Dversion=0.0.7alpha -Dpackaging=aar -DgeneratePom=false -DpomFile=pom-pm.xml
+  - mvn install:install-file -Dfile=wmPmSdk-release.aar -DgroupId=com.github.WalkMe-int -DartifactId=walkme-android-sdk-editor -Dversion=0.0.8alpha -Dpackaging=aar -DgeneratePom=false -DpomFile=pom-pm.xml
