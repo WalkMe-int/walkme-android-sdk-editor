@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.0.7alpha"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.0.8-beta"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.0.7alpha")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.0.8-beta")
 }
 ```
 
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
             WalkMeStartOptions(
                 systemGuid = "<YOUR_SYSTEM_GUID>",
                 env = "Production",
-                dataCenter = WalkmeDataCenter.ProdEu,
+                dataCenter = WalkmeDataCenter.Eu,
             ),
         )
     }
