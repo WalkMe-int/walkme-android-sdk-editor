@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.0.8-beta"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.1.3-beta"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.0.8-beta")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.1.3-beta")
 }
 ```
 
@@ -91,13 +91,14 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 
 **Package:** `com.walkme.pm`
 
-| API | Purpose |
-|-----|--------|
-| `start(activity, options)` | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run. |
-| `stop()` | Stop Power Mode and the underlying SDK; after this, `start()` may be called again. |
-| `setUserId(userId)` | Set or clear (`null`) the end-user id for segmentation, analytics, and support. |
+| API | Purpose                                                                                                           |
+|-----|-------------------------------------------------------------------------------------------------------------------|
+| `start(activity, options)` | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run.      |
+| `stop()` | Stop Power Mode and the underlying SDK; after this, `start()` may be called again.                                |
+| `setUserId(userId)` | Set or clear (`null`) the end-user id for segmentation, analytics, and support.                                   |
 | `setLanguage(language)` | Set UI language where your WalkMe configuration supports it (requires the relevant admin option when applicable). |
-| `setUserAttribute(key, value)` | Set a custom user attribute; pass `null` for `value` to clear. |
+| `setUserAttribute(key, value)` | Set a custom user attribute; pass `null` for `value` to clear.                                                    |
+| `sendEvent(name, attributes)` | Sends a custom tracked event: name identifies the event, attributes is an optional map of key/value data.         |
 
 **Startup options**
 
