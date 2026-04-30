@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.1.4-beta"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.1.5-beta"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.1.4-beta")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.1.5-beta")
 }
 ```
 
@@ -99,12 +99,14 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 | `setUserId(userId)`            | Set or clear (`null`) the end-user id for segmentation, analytics, and support.                                   |
 | `setLanguage(language)`        | Set UI language where your WalkMe configuration supports it (requires the relevant admin option when applicable). |
 | `setUserAttribute(key, value)` | Set a custom user attribute; pass `null` for `value` to clear.                                                    |
+| `setEventUserVars(values)`     | Set keys for WalkMe **event** payloads (`userVars`). Pass a `Map<WalkMeEventUserVarsKey, String>`. Each call **merges** into the stored map (same key overwrites). Use `com.walkme.common.events.wm.WalkMeEventUserVarsKey` (`NAME`, `ROLE`, `TYPE`, `STATUS`, `INFO`). |
+| `startItemByID(itemId, deepLink?)` | Start a specific **promotion** by WalkMe `itemId`. If another promotion is already playing, it is stopped first. Optional `deepLink` is a URI string; when non-null and your app can resolve `ACTION_VIEW` for that URI (same package), the SDK opens it before playing the promotion. |
 | `sendEvent(name, attributes)`  | Sends a custom tracked event: name identifies the event, attributes is an optional map of key/value data.         |
 
 **Startup options**
 
-- `com.walkme.common.WalkMeStartOptions` — same as the core SDK: `systemGuid` (required), `env`, `dataCenter` ([WalkmeDataCenter]).
-- `com.walkme.common.WalkmeDataCenter` — `Prod`, `Eu`, `Us01`, `Eu01`, or `Custom("…")` for any wire string.
+- `com.walkme.common.WalkMeStartOptions` — same as the core SDK: `systemGuid` (required), `environment`, `dataCenter` ([WalkmeDataCenter]).
+- `com.walkme.common.WalkmeDataCenter` — `prod`, `eu`, `us01`, `eu01`, or `Custom("…")` for any wire string.
 
 **Example (Kotlin)**
 
@@ -120,8 +122,8 @@ class MainActivity : AppCompatActivity() {
             this,
             WalkMeStartOptions(
                 systemGuid = "<YOUR_SYSTEM_GUID>",
-                env = "Production",
-                dataCenter = WalkmeDataCenter.Eu,
+                environment = "Production",
+                dataCenter = WalkmeDataCenter.eu,
             ),
         )
     }
@@ -133,14 +135,14 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Adjust `env` and `dataCenter` to match your WalkMe environment.
+Adjust `environment` and `dataCenter` to match your WalkMe environment.
 
 ## 5. Integration checklist
 
 1. Add **JitPack** to repositories.
 2. Add **`walkme-android-sdk-editor`** with your release version.
 3. If the app is **not** Compose-based, add the **Compose** dependencies in §3.
-4. Obtain **`systemGuid`**, **`env`**, and **`dataCenter`** from your WalkMe project / onboarding.
+4. Obtain **`systemGuid`**, **`environment`**, and **`dataCenter`** from your WalkMe project / onboarding.
 5. Call **`start`** once per process when ready; call **`stop`** before starting again or when tearing down.
 6. Wire **`setUserId`** / **`setUserAttribute`** after login and clear on logout if your policy requires it.
 
