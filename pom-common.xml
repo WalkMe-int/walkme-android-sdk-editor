@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.WalkMe-int</groupId>
   <artifactId>walkme-android-sdk-common</artifactId>
-  <version>0.1.5-beta</version>
+  <version>0.1.6-beta</version>
   <packaging>aar</packaging>
   <dependencies>
     <dependency>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>androidx.core</groupId>
       <artifactId>core-ktx</artifactId>
-      <version>1.17.0</version>
+      <version>1.18.0</version>
     </dependency>
     <dependency>
       <groupId>androidx.appcompat</groupId>
@@ -34,32 +34,22 @@
     <dependency>
       <groupId>androidx.lifecycle</groupId>
       <artifactId>lifecycle-viewmodel-ktx</artifactId>
-      <version>2.9.3</version>
+      <version>2.10.0</version>
     </dependency>
     <dependency>
       <groupId>androidx.savedstate</groupId>
       <artifactId>savedstate</artifactId>
-      <version>1.3.2</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.android.material</groupId>
-      <artifactId>material</artifactId>
-      <version>1.13.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.11.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>logging-interceptor</artifactId>
-      <version>5.1.0</version>
+      <version>1.4.0</version>
     </dependency>
     <dependency>
       <groupId>androidx.security</groupId>
       <artifactId>security-crypto</artifactId>
       <version>1.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>androidx.navigation</groupId>
+      <artifactId>navigation-fragment-ktx</artifactId>
+      <version>2.9.8</version>
     </dependency>
     <dependency>
       <groupId>androidx.room</groupId>
@@ -72,14 +62,19 @@
       <version>2.7.2</version>
     </dependency>
     <dependency>
-      <groupId>androidx.navigation</groupId>
-      <artifactId>navigation-fragment-ktx</artifactId>
-      <version>2.9.7</version>
+      <groupId>com.google.android.material</groupId>
+      <artifactId>material</artifactId>
+      <version>1.13.0</version>
     </dependency>
     <dependency>
-      <groupId>com.airbnb.android</groupId>
-      <artifactId>lottie</artifactId>
-      <version>6.4.0</version>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>logging-interceptor</artifactId>
+      <version>5.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.14.0</version>
     </dependency>
     <dependency>
       <groupId>io.insert-koin</groupId>
@@ -90,6 +85,16 @@
       <groupId>io.insert-koin</groupId>
       <artifactId>koin-android</artifactId>
       <version>3.5.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.airbnb.android</groupId>
+      <artifactId>lottie</artifactId>
+      <version>6.4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <version>2.2.10</version>
     </dependency>
   </dependencies>
 </project>
