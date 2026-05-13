@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.1.6-beta"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.1.7-beta"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.1.6-beta")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.1.7-beta")
 }
 ```
 
@@ -91,28 +91,28 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 
 **Package:** `com.walkme.pm`
 
-| API                            | Purpose                                                                                                           |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `start(activity, options)`     | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run.      |
-| `start(application, options)`  | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run.      |
-| `stop()`                       | Stop Power Mode and the underlying SDK; after this, `start()` may be called again.                                |
-| `setUserId(userId)`            | Set or clear (`null`) the end-user id for segmentation, analytics, and support.                                   |
-| `setLanguage(language)`        | Set UI language where your WalkMe configuration supports it (requires the relevant admin option when applicable). |
-| `setVariable(key, value)`      | Set a custom variable used by WalkMe rules and segments; pass `null` for `value` to clear.                        |
-| `setEventUserVars(values)`     | Set keys for WalkMe **event** payloads (`userVars`). Pass a `Map<WalkMeEventUserVarsKey, String>`. Each call **merges** into the stored map (same key overwrites). Use `com.walkme.common.events.wm.WalkMeEventUserVarsKey` (`NAME`, `ROLE`, `TYPE`, `STATUS`, `INFO`). |
+| API                            | Purpose                                                                                                                                                                                                                                                                                |
+|--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `start(activity, options)`     | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run.                                                                                                                                                                           |
+| `start(application, options)`  | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run.                                                                                                                                                                           |
+| `stop()`                       | Stop Power Mode and the underlying SDK; after this, `start()` may be called again.                                                                                                                                                                                                     |
+| `setUserId(userId)`            | Set or clear (`null`) the end-user id for segmentation, analytics, and support.                                                                                                                                                                                                        |
+| `setLanguage(language)`        | Set UI language where your WalkMe configuration supports it (requires the relevant admin option when applicable).                                                                                                                                                                      |
+| `setVariable(key, value)`      | Set a custom variable used by WalkMe rules and segments; pass `null` for `value` to clear.                                                                                                                                                                                             |
+| `setEventUserVars(values)`     | Set keys for WalkMe **event** payloads (`userVars`). Pass a `Map<WalkMeEventUserVarsKey, String>`. Each call **merges** into the stored map (same key overwrites). Use `com.walkme.api.WalkMeEventUserVarsKey` (`NAME`, `ROLE`, `TYPE`, `STATUS`, `INFO`).                             |
 | `startItemByID(itemId, deepLink?)` | Start a specific **promotion** by WalkMe `itemId`. If another promotion is already playing, it is stopped first. Optional `deepLink` is a URI string; when non-null and your app can resolve `ACTION_VIEW` for that URI (same package), the SDK opens it before playing the promotion. |
-| `sendEvent(name, attributes)`  | Sends a custom tracked event: name identifies the event, attributes is an optional map of key/value data.         |
+| `sendEvent(name, attributes)`  | Sends a custom tracked event: name identifies the event, attributes is an optional map of key/value data.                                                                                                                                                                              |
 
 **Startup options**
 
-- `com.walkme.common.WalkMeStartOptions` — same as the core SDK: `systemGuid` (required), `environment`, `dataCenter` ([WalkmeDataCenter]).
-- `com.walkme.common.WalkmeDataCenter` — `prod`, `eu`, `us01`, `eu01`, or `Custom("…")` for any wire string.
+- `com.walkme.api.WalkMeStartOptions` — same as the core SDK: `systemGuid` (required), `environment`, `dataCenter` ([WalkmeDataCenter]).
+- `com.walkme.api.WalkmeDataCenter` — `prod`, `eu`, `us01`, `eu01`, or `Custom("…")` for any wire string.
 
 **Example (Kotlin)**
 
 ```kotlin
-import com.walkme.common.WalkMeStartOptions
-import com.walkme.common.WalkmeDataCenter
+import com.walkme.api.WalkMeStartOptions
+import com.walkme.api.WalkmeDataCenter
 import com.walkme.pm.WalkmeSdkPowerMode
 
 class MainActivity : AppCompatActivity() {

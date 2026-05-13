@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.WalkMe-int</groupId>
   <artifactId>walkme-android-sdk-editor</artifactId>
-  <version>0.1.6-beta</version>
+  <version>0.1.7-beta</version>
   <packaging>aar</packaging>
   <dependencies>
     <dependency>
@@ -49,7 +49,12 @@
     <dependency>
       <groupId>com.github.WalkMe-int</groupId>
       <artifactId>walkme-android-sdk-common</artifactId>
-      <version>0.1.6-beta</version>
+      <version>0.1.7-beta</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.WalkMe-int</groupId>
+      <artifactId>walkme-android-sdk-api</artifactId>
+      <version>0.1.7-beta</version>
     </dependency>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
