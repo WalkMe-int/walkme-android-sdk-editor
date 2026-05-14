@@ -2,10 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.WalkMe-int</groupId>
-  <artifactId>walkme-android-sdk-editor</artifactId>
+  <artifactId>walkme-android-sdk-common</artifactId>
   <version>0.1.7-beta10</version>
   <packaging>aar</packaging>
   <dependencies>
+    <dependency>
+      <groupId>androidx.constraintlayout</groupId>
+      <artifactId>constraintlayout</artifactId>
+      <version>2.2.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>androidx.preference</groupId>
+      <artifactId>preference-ktx</artifactId>
+      <version>1.2.1</version>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>androidx.core</groupId>
       <artifactId>core-ktx</artifactId>
@@ -16,12 +28,6 @@
       <groupId>androidx.appcompat</groupId>
       <artifactId>appcompat</artifactId>
       <version>1.7.1</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>androidx.webkit</groupId>
-      <artifactId>webkit</artifactId>
-      <version>1.15.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -37,9 +43,51 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>androidx.savedstate</groupId>
+      <artifactId>savedstate</artifactId>
+      <version>1.4.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>androidx.security</groupId>
+      <artifactId>security-crypto</artifactId>
+      <version>1.1.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>androidx.navigation</groupId>
+      <artifactId>navigation-fragment-ktx</artifactId>
+      <version>2.9.8</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>androidx.room</groupId>
+      <artifactId>room-runtime</artifactId>
+      <version>2.7.2</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>androidx.room</groupId>
+      <artifactId>room-ktx</artifactId>
+      <version>2.7.2</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.android.material</groupId>
       <artifactId>material</artifactId>
       <version>1.13.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>logging-interceptor</artifactId>
+      <version>5.1.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.14.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -55,18 +103,10 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.WalkMe-int</groupId>
-      <artifactId>walkme-android-sdk-common</artifactId>
-      <version>0.1.7-beta10</version>
+      <groupId>com.airbnb.android</groupId>
+      <artifactId>lottie</artifactId>
+      <version>6.4.0</version>
       <scope>runtime</scope>
-      <type>aar</type>
-    </dependency>
-    <dependency>
-      <groupId>com.github.WalkMe-int</groupId>
-      <artifactId>walkme-android-sdk-api</artifactId>
-      <version>0.1.7-beta10</version>
-      <scope>compile</scope>
-      <type>aar</type>
     </dependency>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
