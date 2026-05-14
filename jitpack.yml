@@ -6,3 +6,4 @@
 
   # then pm sdk (depends on common)
   - mvn install:install-file -Dfile=wmPmSdk-release.aar -DgroupId=com.github.WalkMe-int -DartifactId=walkme-android-sdk-editor -Dversion=0.1.7-beta10 -Dpackaging=aar -DgeneratePom=false -DpomFile=pom-pm.xml
+  
