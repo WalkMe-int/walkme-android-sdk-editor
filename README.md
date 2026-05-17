@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:0.1.8-beta2"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.0.0"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:0.1.8-beta2")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.0.0")
 }
 ```
 
@@ -105,8 +105,27 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 
 **Startup options**
 
-- `com.walkme.api.WalkMeStartOptions` — same as the core SDK: `systemGuid` (required), `environment`, `dataCenter` ([WalkmeDataCenter]).
-- `com.walkme.api.WalkmeDataCenter` — `prod`, `eu`, `us01`, `eu01`, or `Custom("…")` for any wire string.
+`com.walkme.api.WalkMeStartOptions` — same as the core SDK.
+
+| Option | Type | Default | Purpose |
+|--------|------|---------|---------|
+| `systemGuid` | `String` | — | WalkMe system GUID (required). |
+| `environment` | `String` | `"Production"` | Environment name (e.g. `"Production"`). May be overridden internally (e.g. preview mode). |
+| `dataCenter` | `WalkmeDataCenter` | `prod` | Region — `prod`, `eu`, `us01`, `eu01`, or `Custom("…")` for any wire string. |
+| `analyticsEnabled` | `Boolean` | `true` | When `false`, the SDK does not send analytics/events to WalkMe (including heartbeat). |
+| `localLogsEnabled` | `Boolean` | `false` | When `true`, SDK debug logs are written to Logcat (`WMLogger`). Use for troubleshooting only. |
+
+`analyticsEnabled` and `localLogsEnabled` are mutable properties (not constructor parameters). Set them on the options instance before calling `start`:
+
+```kotlin
+val options = WalkMeStartOptions(
+    systemGuid = "<YOUR_SYSTEM_GUID>",
+    environment = "Production",
+    dataCenter = WalkmeDataCenter.eu,
+)
+options.analyticsEnabled = true   // default
+options.localLogsEnabled = false  // default; set true for debug builds if needed
+```
 
 **Example (Kotlin)**
 
@@ -118,14 +137,12 @@ import com.walkme.pm.WalkmeSdkPowerMode
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WalkmeSdkPowerMode.start(
-            this,
-            WalkMeStartOptions(
-                systemGuid = "<YOUR_SYSTEM_GUID>",
-                environment = "Production",
-                dataCenter = WalkmeDataCenter.eu,
-            ),
+        val options = WalkMeStartOptions(
+            systemGuid = "<YOUR_SYSTEM_GUID>",
+            environment = "Production",
+            dataCenter = WalkmeDataCenter.eu,
         )
+        WalkmeSdkPowerMode.start(this, options)
     }
 
     override fun onDestroy() {
