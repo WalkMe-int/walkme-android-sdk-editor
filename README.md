@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.0.1"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.1.0"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.0.1")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.1.0")
 }
 ```
 
@@ -96,12 +96,16 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 | `start(activity, options)`     | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run.                                                                                                                                                                           |
 | `start(application, options)`  | Start WalkMe in Power Mode. **Intended once per process**; further calls are ignored until `stop()` has run.                                                                                                                                                                           |
 | `stop()`                       | Stop Power Mode and the underlying SDK; after this, `start()` may be called again.                                                                                                                                                                                                     |
+| `restart()`                    | Re-initialize Power Mode with the same options and host as the last successful `start()`. No-op if the SDK is not running (`start()` was not called, or `stop()` already ran).                                                                                                         |
 | `setUserId(userId)`            | Set or clear (`null`) the end-user id for segmentation, analytics, and support.                                                                                                                                                                                                        |
 | `setLanguage(language)`        | Set UI language where your WalkMe configuration supports it (requires the relevant admin option when applicable).                                                                                                                                                                      |
 | `setVariable(key, value)`      | Set a custom variable used by WalkMe rules and segments; pass `null` for `value` to clear.                                                                                                                                                                                             |
 | `setEventUserVars(values)`     | Set keys for WalkMe **event** payloads (`userVars`). Pass a `Map<WalkMeEventUserVarsKey, String>`. Each call **merges** into the stored map (same key overwrites). Use `com.walkme.api.WalkMeEventUserVarsKey` (`NAME`, `ROLE`, `TYPE`, `STATUS`, `INFO`).                             |
 | `startItemByID(itemId, deepLink?)` | Start a specific **promotion** by WalkMe `itemId`. If another promotion is already playing, it is stopped first. Optional `deepLink` is a URI string; when non-null and your app can resolve `ACTION_VIEW` for that URI (same package), the SDK opens it before playing the promotion. |
+| `dismissItem()` | Dismiss the **currently presented** WalkMe promotion (not launchers). Does not stop the SDK. No-op if no promotion is active or the SDK is not started. |
 | `sendEvent(name, attributes)`  | Sends a custom tracked event: name identifies the event, attributes is an optional map of key/value data.                                                                                                                                                                              |
+| `setItemInfoListener(listener)` | Register a listener for item lifecycle callbacks (`onItemPresented`, `onItemDismissed`, `onItemAction`). Pass `null` to clear. See **Item info callbacks** below.                                                                                                          |
+| `setAnalyticsListener(listener)` | Register a listener for successfully posted analytics events (`onSendAnalyticsEvent`). Pass `null` to clear. See **Analytics callbacks** below. No callbacks when `analyticsEnabled` is `false`. |
 
 **Startup options**
 
@@ -154,7 +158,82 @@ class MainActivity : AppCompatActivity() {
 
 Adjust `environment` and `dataCenter` to match your WalkMe environment.
 
-## 5. Integration checklist
+## 5. Item info callbacks
+
+Register **`WMItemInfoListener`** (`com.walkme.api`) to receive item lifecycle events and forward them to your analytics, CRM, or app logic.
+
+| Callback | When it fires |
+|----------|----------------|
+| `onItemPresented(itemInfo)` | Right before a deployable item is shown (including when `environment` is `"preview"`). |
+| `onItemDismissed(itemInfo)` | After a deployable item is dismissed (close, submit, remind-me-later, etc.), including in `"preview"`. |
+| `onItemAction(itemInfo, args)` | When the user performs an action on a deployable (e.g. button click), including in `"preview"`. `args` is an optional map of action parameters. |
+
+**`WMItemInfo`** (`itemId`, `itemActionType`, `userData`) — context for the item and the action that triggered the callback (if any).
+
+**`WMUserData`** — user/device snapshot at interaction time: `userAttributesMap`, `sessionDuration`, `deviceVersion`, `deviceId`, `deviceModel`, `deviceOrientation`, `appVersion`, `appName`, `locale`, `sdkVer`, `sessionId`, `isNewUser` (`"true"` / `"false"`), `timezone`, `network`, `systemName`, `timestamp`.
+
+Callbacks are delivered on the **main thread** in all environments, including Power Mode preview (`environment == "preview"`). The listener is cleared when you call `stop()`.
+
+**Power Mode note:** Like other runtime APIs, `setItemInfoListener` is **ignored** while a PM account session is active and the SDK is **not** in preview mode. In preview mode, register the listener after `start()` to receive item callbacks while testing deployables.
+
+**Example (Kotlin)**
+
+```kotlin
+import com.walkme.api.WMItemInfo
+import com.walkme.api.WMItemInfoListener
+import com.walkme.pm.WalkmeSdkPowerMode
+
+WalkmeSdkPowerMode.setItemInfoListener(object : WMItemInfoListener {
+    override fun onItemPresented(itemInfo: WMItemInfo) {
+        // Item about to show — itemInfo.itemId, itemInfo.userData, …
+    }
+
+    override fun onItemDismissed(itemInfo: WMItemInfo) {
+        // Item dismissed — itemInfo.itemActionType describes the dismiss action
+    }
+
+    override fun onItemAction(itemInfo: WMItemInfo, args: Map<String, String>?) {
+        // User interacted with a deployable action
+    }
+})
+
+// On teardown:
+WalkmeSdkPowerMode.setItemInfoListener(null)
+```
+
+## 6. Analytics callbacks
+
+Register **`WMAnalyticsListener`** (`com.walkme.api.analytics`) to receive analytics payloads after the SDK successfully posts them to WalkMe (`event/postEvent`).
+
+| Callback | When it fires |
+|----------|----------------|
+| `onSendAnalyticsEvent(eventName, params)` | After an analytics event POST succeeds. Not called on network failure or when events are not sent. |
+
+- **`eventName`** — WalkMe event type string (same as the `"type"` field in the POST body, e.g. `"play"`, `"click"`, `"activity"`).
+- **`params`** — Full JSON body posted to WalkMe (`time`, `type`, `data`, `env`, `version`, `wm`, `ctx`, `sId`). Treat as read-only.
+
+Callbacks are delivered on the **main thread**. The listener is cleared when you call `stop()`. No callbacks are delivered when **`analyticsEnabled`** is `false` on your startup options (the SDK does not send events in that case).
+
+**Power Mode note:** Like other runtime APIs, `setAnalyticsListener` is **ignored** while a PM account session is active and the SDK is **not** in preview mode. In preview mode, register the listener after `start()` to receive analytics callbacks while testing.
+
+**Example (Kotlin)**
+
+```kotlin
+import com.walkme.api.analytics.WMAnalyticsListener
+import com.walkme.pm.WalkmeSdkPowerMode
+import org.json.JSONObject
+
+WalkmeSdkPowerMode.setAnalyticsListener(object : WMAnalyticsListener {
+    override fun onSendAnalyticsEvent(eventName: String, params: JSONObject) {
+        // Forward to your analytics — eventName, params.optJSONObject("data"), …
+    }
+})
+
+// On teardown:
+WalkmeSdkPowerMode.setAnalyticsListener(null)
+```
+
+## 7. Integration checklist
 
 1. Add **JitPack** to repositories.
 2. Add **`walkme-android-sdk-editor`** with your release version.
@@ -162,6 +241,8 @@ Adjust `environment` and `dataCenter` to match your WalkMe environment.
 4. Obtain **`systemGuid`**, **`environment`**, and **`dataCenter`** from your WalkMe project / onboarding.
 5. Call **`start`** once per process when ready; call **`stop`** before starting again or when tearing down.
 6. Wire **`setUserId`** / **`setVariable`** after login and clear on logout if your policy requires it.
+7. Optionally register **`setItemInfoListener`** after `start()` if you need item lifecycle hooks.
+8. Optionally register **`setAnalyticsListener`** after `start()` if you need successfully posted analytics payloads.
 
 ---
 
