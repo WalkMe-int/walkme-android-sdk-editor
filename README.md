@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.1.0"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.1.1"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.1.0")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.1.1")
 }
 ```
 
@@ -101,6 +101,7 @@ Keep Compose library versions consistent with the BOM and with future SDK releas
 | `setLanguage(language)`        | Set UI language where your WalkMe configuration supports it (requires the relevant admin option when applicable).                                                                                                                                                                      |
 | `setVariable(key, value)`      | Set a custom variable used by WalkMe rules and segments; pass `null` for `value` to clear.                                                                                                                                                                                             |
 | `setEventUserVars(values)`     | Set keys for WalkMe **event** payloads (`userVars`). Pass a `Map<WalkMeEventUserVarsKey, String>`. Each call **merges** into the stored map (same key overwrites). Use `com.walkme.api.WalkMeEventUserVarsKey` (`NAME`, `ROLE`, `TYPE`, `STATUS`, `INFO`).                             |
+| `setTenantId(tenantId)`        | Set or clear (`null`) the tenant ID for the current user (max **50 characters**; longer values are truncated). Attached to analytics events for tenant-based reporting. Call after sign-in when the tenant is known; pass `null` on sign-out. Persisted across app sessions.                                                             |
 | `startItemByID(itemId, deepLink?)` | Start a specific **promotion** by WalkMe `itemId`. If another promotion is already playing, it is stopped first. Optional `deepLink` is a URI string; when non-null and your app can resolve `ACTION_VIEW` for that URI (same package), the SDK opens it before playing the promotion. |
 | `dismissItem()` | Dismiss the **currently presented** WalkMe promotion (not launchers). Does not stop the SDK. No-op if no promotion is active or the SDK is not started. |
 | `sendEvent(name, attributes)`  | Sends a custom tracked event: name identifies the event, attributes is an optional map of key/value data.                                                                                                                                                                              |
@@ -240,7 +241,7 @@ WalkmeSdkPowerMode.setAnalyticsListener(null)
 3. If the app is **not** Compose-based, add the **Compose** dependencies in §3.
 4. Obtain **`systemGuid`**, **`environment`**, and **`dataCenter`** from your WalkMe project / onboarding.
 5. Call **`start`** once per process when ready; call **`stop`** before starting again or when tearing down.
-6. Wire **`setUserId`** / **`setVariable`** after login and clear on logout if your policy requires it.
+6. Wire **`setUserId`** / **`setVariable`** / **`setTenantId`** after login and clear on logout if your policy requires it.
 7. Optionally register **`setItemInfoListener`** after `start()` if you need item lifecycle hooks.
 8. Optionally register **`setAnalyticsListener`** after `start()` if you need successfully posted analytics payloads.
 

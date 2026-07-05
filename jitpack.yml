@@ -1,2 +1,2 @@
 install:
-  - mvn install:install-file -Dfile=wmPmSdkRelease-release.aar -DgroupId=com.github.WalkMe-int -DartifactId=walkme-android-sdk-editor -Dversion=1.1.0 -Dpackaging=aar -DgeneratePom=false -DpomFile=pom-pm.xml
+  - mvn install:install-file -Dfile=wmPmSdkRelease-release.aar -DgroupId=com.github.WalkMe-int -DartifactId=walkme-android-sdk-editor -Dversion=1.1.1 -Dpackaging=aar -DgeneratePom=false -DpomFile=pom-pm.xml
