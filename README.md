@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.1.1"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.1.2"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.1.1")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.1.2")
 }
 ```
 
@@ -234,7 +234,63 @@ WalkmeSdkPowerMode.setAnalyticsListener(object : WMAnalyticsListener {
 WalkmeSdkPowerMode.setAnalyticsListener(null)
 ```
 
-## 7. Integration checklist
+## 7. Permalinks
+
+WalkMe permalinks let external links invoke SDK actions via a custom URL scheme. The SDK handles them automatically when a host `Activity` starts with a matching `VIEW` intent — no manual forwarding code is required.
+
+**Prerequisites**
+
+1. **`systemGuid` from WalkMe onboarding** — the same value must be used in:
+   - `WalkMeStartOptions.systemGuid` passed to `start()`
+   - The manifest intent-filter `android:scheme` (via `WalkMePermalinks.scheme(systemGuid)`)
+2. **SDK must be started** — the host manifest registers `com.walkme.api.{systemGuid}`. After `start()`, the SDK validates the permalink scheme against `WalkMeStartOptions.systemGuid` and dispatches the action. Permalinks received before `start()` are saved and replayed when `start()` completes.
+3. **Call `start()` in `onCreate`** — permalinks on the same launch are queued until `start()` finishes, then processed automatically:
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    WalkmeSdkPowerMode.start(this, options) // must run before permalink handling on this launch
+    // ...
+}
+```
+
+If your app can be cold-started via a permalink, consider calling `start()` from `Application.onCreate` instead.
+
+**URL format (v1.0):**
+
+```text
+com.walkme.api.{systemGuid}://1.0/{action}?{query}
+```
+
+Use `com.walkme.api.permalink.WalkMePermalinks.scheme(systemGuid)` to build the manifest scheme string (replace `systemGuid` with your WalkMe project GUID).
+
+| Action | Path | Required query | SDK API |
+|--------|------|----------------|---------|
+| Restart SDK | `restart_sdk` | — | `restart()` |
+| Start item | `start_item` | `item_id` | `startItemByID(itemId)` |
+| Start item + redirect | `start_item` | `item_id`, `redirect` | `startItemByID(itemId, redirect)` |
+| Send tracked event | `send_event` | `name` | `sendEvent(name, attributes)` |
+| Set variable | `set_variable` | `key` | `setVariable(key, value)` |
+| Set end user ID | `set_user_id` | — | `setUserId(userId)` — `user_id` optional |
+
+**Example:** `com.walkme.api.c22c935518874267b946f5ae49b21d20://1.0/restart_sdk`
+
+**Manifest** — add an intent-filter to your deep-link `Activity`. The scheme must use the **same** `systemGuid` you pass to `start()`:
+
+```xml
+<intent-filter>
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data
+        android:scheme="com.walkme.api.YOUR_SYSTEM_GUID"
+        android:host="1.0" />
+</intent-filter>
+```
+
+For hot delivery (`singleTop` / `singleTask`), call `setIntent(intent)` in `onNewIntent` so the latest permalink is visible to the SDK.
+
+## 8. Integration checklist
 
 1. Add **JitPack** to repositories.
 2. Add **`walkme-android-sdk-editor`** with your release version.
@@ -244,6 +300,7 @@ WalkmeSdkPowerMode.setAnalyticsListener(null)
 6. Wire **`setUserId`** / **`setVariable`** / **`setTenantId`** after login and clear on logout if your policy requires it.
 7. Optionally register **`setItemInfoListener`** after `start()` if you need item lifecycle hooks.
 8. Optionally register **`setAnalyticsListener`** after `start()` if you need successfully posted analytics payloads.
+9. Add a **permalink intent-filter** (§7) on your deep-link `Activity` using the same `systemGuid` as in `start()`.
 
 ---
 

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.WalkMe-int</groupId>
   <artifactId>walkme-android-sdk-editor</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <packaging>aar</packaging>
   <dependencies>
     <dependency>
@@ -118,12 +118,6 @@
       <groupId>com.airbnb.android</groupId>
       <artifactId>lottie</artifactId>
       <version>6.4.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.caverock</groupId>
-      <artifactId>androidsvg</artifactId>
-      <version>1.4</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
