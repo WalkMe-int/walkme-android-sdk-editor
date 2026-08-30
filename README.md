@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.1.5"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.2.0"
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.1.5")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.2.0")
 }
 ```
 
@@ -290,7 +290,47 @@ Use `com.walkme.api.permalink.WalkMePermalinks.scheme(systemGuid)` to build the 
 
 For hot delivery (`singleTop` / `singleTask`), call `setIntent(intent)` in `onNewIntent` so the latest permalink is visible to the SDK.
 
-## 8. Integration checklist
+## 8. Capturing Jetpack Compose elements
+
+Power Mode precise capture hit-tests the **Compose semantics tree**, not painted layout. A composable with no semantics cannot be selected: the editor highlights the full-screen Compose host (or a nearby `Text` / `Button`) instead of the widget you aimed at. Layout-only `Column` / `Box` / padding / shadow and text drawn with `drawText` (instead of `Text`) are the usual cases.
+
+To make a container capturable, publish a **stable semantics node whose bounds are the whole widget**. Use a unique `testTag` (WalkMe encodes it for later find). Put `semantics` / `testTag` **first** on the modifier chain (or on a wrapper `Box`) so bounds include padding and chrome — a tag applied after `padding` only covers the inner content.
+
+Do **not** use `semantics(mergeDescendants = true)` if you still need to capture inner controls separately.
+
+**Example (Kotlin)**
+
+```kotlin
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun TeamCard(/* … */) {
+    Box(
+        modifier = Modifier
+            .semantics { contentDescription = "My Team" }
+            .testTag("home_my_team_card")
+            .fillMaxWidth()
+    ) {
+        Column(Modifier.fillMaxWidth().padding(24.dp)) {
+            // Card body. Aim at the card chrome or heading to capture this node.
+            // Child Text / Button remain separately capturable.
+        }
+    }
+}
+```
+
+`Text`, `Button`, and `Modifier.clickable` are capturable without extra work. For custom cards and drawn labels, add `testTag` (and optionally `contentDescription`) as above, then aim at that widget in precise capture.
+
+## 9. Integration checklist
 
 1. Add **JitPack** to repositories.
 2. Add **`walkme-android-sdk-editor`** with your release version.
