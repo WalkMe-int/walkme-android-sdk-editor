@@ -45,7 +45,7 @@ Replace the version with any tag or commit published on JitPack.
 
 ```gradle
 dependencies {
-    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.2.0"
+    implementation "com.github.WalkMe-int:walkme-android-sdk-editor:1.2.1"
 }
 ```
 
@@ -53,41 +53,11 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.2.0")
+    implementation("com.github.WalkMe-int:walkme-android-sdk-editor:1.2.1")
 }
 ```
 
-## 3. Compose dependencies (host app does **not** use Jetpack Compose)
-
-The Editor SDK includes UI built with Compose. If your app **already** uses Compose, align versions with your own Compose BOM and you usually **do not** need the block below. If your app **does not** use Compose, add **all** of the following:
-
-**Groovy**
-
-```gradle
-dependencies {
-    implementation platform("androidx.compose:compose-bom:2025.12.00")
-    implementation "androidx.compose.ui:ui:1.10.6"
-    implementation "androidx.compose.ui:ui-tooling-preview:1.10.6"
-    implementation "androidx.compose.material3:material3:1.4.0"
-    implementation "androidx.compose.material:material-icons-core:1.7.8"
-}
-```
-
-**Kotlin DSL**
-
-```kotlin
-dependencies {
-    implementation(platform("androidx.compose:compose-bom:2025.12.00"))
-    implementation("androidx.compose.ui:ui:1.10.6")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.10.6")
-    implementation("androidx.compose.material3:material3:1.4.0")
-    implementation("androidx.compose.material:material-icons-core:1.7.8")
-}
-```
-
-Keep Compose library versions consistent with the BOM and with future SDK release notes if versions change.
-
-## 4. Public API — `WalkmeSdkPowerMode`
+## 3. Public API — `WalkmeSdkPowerMode`
 
 **Package:** `com.walkme.pm`
 
@@ -159,7 +129,7 @@ class MainActivity : AppCompatActivity() {
 
 Adjust `environment` and `dataCenter` to match your WalkMe environment.
 
-## 5. Item info callbacks
+## 4. Item info callbacks
 
 Register **`WMItemInfoListener`** (`com.walkme.api`) to receive item lifecycle events and forward them to your analytics, CRM, or app logic.
 
@@ -202,7 +172,7 @@ WalkmeSdkPowerMode.setItemInfoListener(object : WMItemInfoListener {
 WalkmeSdkPowerMode.setItemInfoListener(null)
 ```
 
-## 6. Analytics callbacks
+## 5. Analytics callbacks
 
 Register **`WMAnalyticsListener`** (`com.walkme.api.analytics`) to receive analytics payloads after the SDK successfully posts them to WalkMe (`event/postEvent`).
 
@@ -234,7 +204,7 @@ WalkmeSdkPowerMode.setAnalyticsListener(object : WMAnalyticsListener {
 WalkmeSdkPowerMode.setAnalyticsListener(null)
 ```
 
-## 7. Permalinks
+## 6. Permalinks
 
 WalkMe permalinks let external links invoke SDK actions via a custom URL scheme. The SDK handles them automatically when a host `Activity` starts with a matching `VIEW` intent — no manual forwarding code is required.
 
@@ -290,7 +260,7 @@ Use `com.walkme.api.permalink.WalkMePermalinks.scheme(systemGuid)` to build the 
 
 For hot delivery (`singleTop` / `singleTask`), call `setIntent(intent)` in `onNewIntent` so the latest permalink is visible to the SDK.
 
-## 8. Capturing Jetpack Compose elements
+## 7. Capturing Jetpack Compose elements
 
 Power Mode precise capture hit-tests the **Compose semantics tree**, not painted layout. A composable with no semantics cannot be selected: the editor highlights the full-screen Compose host (or a nearby `Text` / `Button`) instead of the widget you aimed at. Layout-only `Column` / `Box` / padding / shadow and text drawn with `drawText` (instead of `Text`) are the usual cases.
 
@@ -330,17 +300,16 @@ fun TeamCard(/* … */) {
 
 `Text`, `Button`, and `Modifier.clickable` are capturable without extra work. For custom cards and drawn labels, add `testTag` (and optionally `contentDescription`) as above, then aim at that widget in precise capture.
 
-## 9. Integration checklist
+## 8. Integration checklist
 
 1. Add **JitPack** to repositories.
 2. Add **`walkme-android-sdk-editor`** with your release version.
-3. If the app is **not** Compose-based, add the **Compose** dependencies in §3.
-4. Obtain **`systemGuid`**, **`environment`**, and **`dataCenter`** from your WalkMe project / onboarding.
-5. Call **`start`** once per process when ready; call **`stop`** before starting again or when tearing down.
-6. Wire **`setUserId`** / **`setVariable`** / **`setTenantId`** after login and clear on logout if your policy requires it.
-7. Optionally register **`setItemInfoListener`** after `start()` if you need item lifecycle hooks.
-8. Optionally register **`setAnalyticsListener`** after `start()` if you need successfully posted analytics payloads.
-9. Add a **permalink intent-filter** (§7) on your deep-link `Activity` using the same `systemGuid` as in `start()`.
+3. Obtain **`systemGuid`**, **`environment`**, and **`dataCenter`** from your WalkMe project / onboarding.
+4. Call **`start`** once per process when ready; call **`stop`** before starting again or when tearing down.
+5. Wire **`setUserId`** / **`setVariable`** / **`setTenantId`** after login and clear on logout if your policy requires it.
+6. Optionally register **`setItemInfoListener`** after `start()` if you need item lifecycle hooks.
+7. Optionally register **`setAnalyticsListener`** after `start()` if you need successfully posted analytics payloads.
+8. Add a **permalink intent-filter** (§6) on your deep-link `Activity` using the same `systemGuid` as in `start()`.
 
 ---
 

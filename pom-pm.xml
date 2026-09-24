@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.WalkMe-int</groupId>
   <artifactId>walkme-android-sdk-editor</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <packaging>aar</packaging>
   <dependencies>
     <dependency>
@@ -88,6 +88,12 @@
       <groupId>com.google.android.material</groupId>
       <artifactId>material</artifactId>
       <version>1.13.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>androidx.recyclerview</groupId>
+      <artifactId>recyclerview</artifactId>
+      <version>1.4.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
